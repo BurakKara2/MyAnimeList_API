@@ -1,0 +1,44 @@
+{
+	"info": {
+		"_postman_id": "048ce83d-b2d7-4f2e-878f-60c068f45637",
+		"name": "Auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=401761c624aa70000025217368491137&code_challenge=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU",
+					"protocol": "https",
+					"host": [
+						"myanimelist",
+						"net"
+					],
+					"path": [
+						"v1",
+						"oauth2",
+						"authorize"
+					],
+					"query": [
+						{
+							"key": "response_type",
+							"value": "code"
+						},
+						{
+							"key": "client_id",
+							"value": "401761c624aa70000025217368491137"
+						},
+						{
+							"key": "code_challenge",
+							"value": "47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

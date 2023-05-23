@@ -1,0 +1,310 @@
+{
+	"info": {
+		"_postman_id": "f6d16fb2-b99e-4e7d-be37-bddba364b401",
+		"name": "MyAnimeList",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "token",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"let response = pm.response.json();\r",
+							"pm.environment.set(\"tokenId\", response.access_token);\r",
+							"\r",
+							"pm.test(\"API responds within the expected treshhold\", () => {\r",
+							"  // set the response time in milliseconds\r",
+							"  const expectedTimeInMilliseconds = 852;\r",
+							"\r",
+							"  pm.expect(pm.response.responseTime).to.be.lessThan(\r",
+							"    expectedTimeInMilliseconds + 1,\r",
+							"    `The endpoint did not respond within ${expectedTimeInMilliseconds} ms. Response came in ${pm.response.responseTime} ms`\r",
+							"  );\r",
+							"});\r",
+							"pm.test(\"token type is true\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.token_type).to.eql(\"Bearer\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "Test1234",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "Test271993",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "401761c624aa70000025217368491137",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "def5020077fb1c5c114495d3fda16c426123663c4ed21a508f623d81169006647893ef78b12ffbba3d13a64a21beeaca710c0731af1c6c968a2bc48bdc94141e0395538bf56377d864234109b7b1e02b462778b539327c6b0a8692c54be0fc5be0d8491b86f2518b365d1c864d6ee49e0b2fc702eff39c7d5fa7d14625f9ba741c78dc5aa795395e274dc5bd714e244c903ef9852c641a963d453bd45f08c8a6f8102d5631858bf2d1e592590ed49f72a0304a9438e6229e4b84047790c5f9722e146c19f9cf539ecba898a33b0690af6199fae58230468d6a97c70c570e3cd6e8ad73e46deefd12b037af2f1bee7146db7965380ba102de183796633b74e892df6ed2ad6a45a898a3bdec82633f58b1acdedab43ea83bbdb204f7968e1b200fd3452b0d7d7dc4543c5c8861e3776b6350fb5589e28bc06e2f47c147af8c521ccb737b9eda90175ba7136892428cbb37278eaebfdc2268b202f9e4639c44127d779100533be9407e8bd7a74cd45ebb33f3ea908cc3886cf92fa058e70140a368a088f83cf70124ff8fb6d3e2272c4faa9b6c76c3e7",
+							"type": "text"
+						},
+						{
+							"key": "code_verifier",
+							"value": "47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "90c1867a026c8b08e54aa4848f467ebc1f83d87f55ee8afb50cb9e5cab2f5e96",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://myanimelist.net/v1/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"myanimelist",
+						"net"
+					],
+					"path": [
+						"v1",
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get anime list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"First id value is true\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data[0].node.id).to.eql(21);\r",
+							"});\r",
+							"pm.test(\"Response time is less than 600ms\", () => {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(600);\r",
+							"});\r",
+							"pm.test(\"Second id value type is Number\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data[1].node.id).to.be.a(\"number\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenId}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer YOUR_TOKEN"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/anime?q=one&limit=4",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"anime"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "one"
+						},
+						{
+							"key": "limit",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get suggested anime",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Second title value type is String\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data[1].node.title).to.be.a(\"string\");\r",
+							"});\r",
+							"pm.test(\"First medium URL  is true\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data[0].node.main_picture.medium).to.eql(\"https://api-cdn.myanimelist.net/images/anime/1282/119979.jpg\");\r",
+							"});\r",
+							"pm.test(\"Response time is less than 600ms\", () => {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(800);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenId}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer YOUR_TOKEN"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/anime/suggestions?limit=4",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"anime",
+						"suggestions"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user anime list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"first id value is true\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data[0].node.title).to.eql(\"No Game No Life\");\r",
+							"});\r",
+							"pm.test(\"First title value type is String\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data[0].node.title).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenId}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer YOUR_TOKEN"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/users/@me/animelist?fields=list_status&limit=4",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"users",
+						"@me",
+						"animelist"
+					],
+					"query": [
+						{
+							"key": "fields",
+							"value": "list_status"
+						},
+						{
+							"key": "limit",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
